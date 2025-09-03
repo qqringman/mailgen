@@ -161,6 +161,8 @@
                 <input type="text" class="item-text" placeholder="項目內容..." value="">
                 <div class="item-controls">
                     <button class="btn-icon add-child-item" title="新增子項目"><i class="fas fa-plus"></i></button>
+                    <button class="btn-icon copy-item" title="複製項目"><i class="fas fa-copy"></i></button>
+                    <button class="btn-icon paste-item" title="貼上項目" style="display: none;"><i class="fas fa-paste"></i></button>
                     <button class="btn-icon delete-item" title="刪除項目"><i class="fas fa-times"></i></button>
                 </div>
             </div>
@@ -249,6 +251,63 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeTemplateModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 統計報表對話框 -->
+    <div id="statisticsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-chart-bar"></i> 任務統計報表</h3>
+                <button class="close-modal" onclick="closeStatisticsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="statistics-summary">
+                    <div class="stat-card">
+                        <h4>總任務數</h4>
+                        <div class="stat-number" id="totalTasks">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>逾期任務</h4>
+                        <div class="stat-number danger" id="overdueTasks">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h4>活躍 Owner</h4>
+                        <div class="stat-number" id="activeOwners">0</div>
+                    </div>
+                </div>
+                
+                <div class="statistics-table-section">
+                    <h4>Owner 任務分布</h4>
+                    <div class="table-responsive">
+                        <table id="statisticsTable" class="stats-table">
+                            <thead>
+                                <tr>
+                                    <th>Owner</th>
+                                    <th>總任務數</th>
+                                    <th>進行中</th>
+                                    <th>已完成</th>
+                                    <th>逾期任務</th>
+                                    <th>狀態</th>
+                                </tr>
+                            </thead>
+                            <tbody id="statisticsTableBody">
+                                <!-- 統計資料將動態插入 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="overdue-tasks-section" style="margin-top: 20px;">
+                    <h4>逾期任務詳情</h4>
+                    <div id="overdueTasksList" class="overdue-list">
+                        <!-- 逾期任務列表 -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeStatisticsModal()">關閉</button>
             </div>
         </div>
     </div>

@@ -242,7 +242,7 @@ main {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* 區塊樣式 */
+/* 區塊樣式 - 右上角橫向控制按鈕 */
 .block {
     background: white;
     border-radius: 8px;
@@ -263,6 +263,7 @@ main {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
+    position: relative;
 }
 
 .block-header-left {
@@ -281,6 +282,7 @@ main {
     padding: 4px 8px;
     border-radius: 4px;
     flex: 1;
+    max-width: 300px;
 }
 
 .block-title:focus {
@@ -291,7 +293,33 @@ main {
 
 .block-controls {
     display: flex;
-    gap: 4px;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+
+/* 區塊控制按鈕樣式 */
+.block-controls .btn-icon {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 6px;
+    font-size: 12px;
+    min-width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.block-controls .btn-icon:hover {
+    background-color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.block-controls .dropdown {
+    margin-left: 8px;
 }
 
 .tasks-container {
@@ -941,6 +969,19 @@ main {
     white-space: nowrap;
     z-index: 1000;
     pointer-events: none;
+}
+
+/* 文字顏色樣式 */
+.text-danger {
+    color: var(--danger-red) !important;
+}
+
+.text-warning {
+    color: var(--warning-orange) !important;
+}
+
+.text-success {
+    color: var(--success-green) !important;
 }
 
 /* 載入狀態 */

@@ -197,8 +197,14 @@ function setupTaskEventListeners(task) {
     // 輸入框事件
     const inputs = task.querySelectorAll('input, select');
     inputs.forEach(input => {
-        input.addEventListener('input', updatePreview);
-        input.addEventListener('change', updatePreview);
+        input.addEventListener('input', function() {
+            updatePreview();
+            refreshStatusLight();
+        });
+        input.addEventListener('change', function() {
+            updatePreview();
+            refreshStatusLight();
+        });
     });
 }
 
