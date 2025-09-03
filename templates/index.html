@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tasks"></i> Task Management System</h1>
+            <div class="toolbar">
+                <button id="addBlockBtn" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> 新增區塊
+                </button>
+                <button id="saveBtn" class="btn btn-success">
+                    <i class="fas fa-save"></i> 儲存
+                </button>
+                <button id="loadBtn" class="btn btn-info">
+                    <i class="fas fa-upload"></i> 載入
+                </button>
+                <button id="previewBtn" class="btn btn-warning">
+                    <i class="fas fa-eye"></i> 預覽
+                </button>
+                <button id="exportHtmlBtn" class="btn btn-secondary">
+                    <i class="fas fa-file-code"></i> 匯出 HTML
+                </button>
+                <button id="exportMsgBtn" class="btn btn-danger">
+                    <i class="fas fa-envelope"></i> 匯出 MSG
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <div class="editor-container">
+                <div id="blocksContainer" class="blocks-container">
+                    <!-- 動態生成的區塊將插入這裡 -->
+                </div>
+            </div>
+
+            <div id="previewContainer" class="preview-container" style="display: none;">
+                <div class="preview-header">
+                    <h2>Outlook 預覽</h2>
+                    <button id="closePreviewBtn" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> 關閉預覽
+                    </button>
+                </div>
+                <div id="previewContent" class="preview-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 區塊模板 -->
+    <template id="blockTemplate">
+        <div class="block" data-block-id="">
+            <div class="block-header">
+                <div class="block-header-left">
+                    <input type="text" class="block-title" placeholder="輸入區塊標題..." value="">
+                    <div class="block-controls">
+                        <button class="btn-icon move-up" title="上移"><i class="fas fa-arrow-up"></i></button>
+                        <button class="btn-icon move-down" title="下移"><i class="fas fa-arrow-down"></i></button>
+                        <button class="btn-icon delete-block" title="刪除區塊"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <button class="add-task-btn btn btn-sm btn-primary">
+                    <i class="fas fa-plus"></i> 新增任務
+                </button>
+            </div>
+            <div class="tasks-container">
+                <!-- 任務將插入這裡 -->
+            </div>
+        </div>
+    </template>
+
+    <!-- 任務模板 -->
+    <template id="taskTemplate">
+        <div class="task" data-task-id="">
+            <div class="task-header">
+                <span class="task-number">1.</span>
+                <div class="task-info">
+                    <input type="text" class="task-title" placeholder="任務標題..." value="">
+                    <div class="task-meta">
+                        <input type="text" class="task-owner" placeholder="負責人" value="">
+                        <input type="date" class="task-due-date" value="">
+                        <select class="task-status">
+                            <option value="">選擇狀態</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Blocked">Blocked</option>
+                        </select>
+                        <select class="task-priority">
+                            <option value="">選擇優先度</option>
+                            <option value="1">Priority:1</option>
+                            <option value="2">Priority:2</option>
+                            <option value="3">Priority:3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="task-controls">
+                    <button class="btn-icon move-task-up" title="上移任務"><i class="fas fa-arrow-up"></i></button>
+                    <button class="btn-icon move-task-down" title="下移任務"><i class="fas fa-arrow-down"></i></button>
+                    <button class="btn-icon add-item" title="新增項目"><i class="fas fa-plus"></i></button>
+                    <button class="btn-icon add-table" title="新增表格"><i class="fas fa-table"></i></button>
+                    <button class="btn-icon add-image" title="新增圖片"><i class="fas fa-image"></i></button>
+                    <button class="btn-icon delete-task" title="刪除任務"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="task-content">
+                <!-- 任務內容項目將插入這裡 -->
+            </div>
+        </div>
+    </template>
+
+    <!-- 項目模板 -->
+    <template id="itemTemplate">
+        <div class="task-item" data-item-id="">
+            <span class="item-bullet">■</span>
+            <input type="text" class="item-text" placeholder="項目內容..." value="">
+            <button class="btn-icon delete-item" title="刪除項目"><i class="fas fa-times"></i></button>
+        </div>
+    </template>
+
+    <!-- 表格模板 -->
+    <template id="tableTemplate">
+        <div class="table-container" data-table-id="">
+            <div class="table-controls">
+                <button class="btn-sm add-row">新增列</button>
+                <button class="btn-sm add-col">新增欄</button>
+                <button class="btn-sm delete-table">刪除表格</button>
+            </div>
+            <table class="task-table">
+                <tbody>
+                    <tr>
+                        <td contenteditable="true">欄位1</td>
+                        <td contenteditable="true">欄位2</td>
+                    </tr>
+                    <tr>
+                        <td contenteditable="true">資料1</td>
+                        <td contenteditable="true">資料2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <!-- 圖片模板 -->
+    <template id="imageTemplate">
+        <div class="image-container" data-image-id="">
+            <div class="image-controls">
+                <input type="range" class="image-width-slider" min="100" max="800" value="300">
+                <span class="width-display">300px</span>
+                <button class="btn-sm delete-image">刪除圖片</button>
+            </div>
+            <img src="" alt="Task Image" class="task-image">
+        </div>
+    </template>
+
+    <!-- 圖片上傳對話框 -->
+    <div id="imageUploadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>上傳圖片</h3>
+                <button class="close-modal" onclick="closeImageModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="file" id="imageFileInput" accept="image/*">
+                <div class="upload-preview">
+                    <img id="uploadPreview" src="" alt="預覽" style="display: none;">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeImageModal()">取消</button>
+                <button class="btn btn-primary" onclick="uploadImage()">上傳</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

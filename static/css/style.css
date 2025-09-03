@@ -1,0 +1,629 @@
+/* 北歐藍色主題樣式 */
+:root {
+    --primary-blue: #2E5266;
+    --secondary-blue: #52798B;
+    --light-blue: #A8CEDD;
+    --accent-blue: #4F90A6;
+    --background-gray: #F8FAFB;
+    --text-dark: #2C3E50;
+    --text-medium: #5D6D7E;
+    --border-color: #E8ECEF;
+    --success-green: #27AE60;
+    --warning-orange: #F39C12;
+    --danger-red: #E74C3C;
+    --highlight-yellow: #FFFF00;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-gray);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 標題區域 */
+header {
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* 按鈕樣式 */
+.btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-blue);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: var(--success-green);
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #229954;
+}
+
+.btn-info {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: var(--secondary-blue);
+}
+
+.btn-warning {
+    background-color: var(--warning-orange);
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #E67E22;
+}
+
+.btn-secondary {
+    background-color: var(--text-medium);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--text-dark);
+}
+
+.btn-danger {
+    background-color: var(--danger-red);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #C0392B;
+}
+
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: var(--text-medium);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+    background-color: var(--light-blue);
+    color: var(--primary-blue);
+}
+
+/* 主內容區域 */
+main {
+    display: flex;
+    gap: 20px;
+}
+
+.editor-container {
+    flex: 1;
+}
+
+.blocks-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 區塊樣式 */
+.block {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.block-header {
+    background-color: var(--highlight-yellow);
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.block-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.block-title {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--text-dark);
+    padding: 4px 8px;
+    border-radius: 4px;
+    flex: 1;
+}
+
+.block-title:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 2px var(--accent-blue);
+}
+
+.block-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.tasks-container {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* 任務樣式 */
+.task {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    background-color: #FDFDFD;
+}
+
+.task-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.task-number {
+    font-weight: bold;
+    color: var(--primary-blue);
+    min-width: 20px;
+}
+
+.task-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.task-title {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text-dark);
+    padding: 4px;
+    border-radius: 3px;
+    width: 100%;
+}
+
+.task-title:focus {
+    outline: none;
+    background-color: var(--light-blue);
+    box-shadow: 0 0 0 2px var(--accent-blue);
+}
+
+.task-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.task-owner, .task-due-date, .task-status, .task-priority {
+    padding: 4px 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    font-size: 12px;
+    background-color: white;
+}
+
+.task-owner {
+    min-width: 80px;
+}
+
+.task-due-date {
+    color: var(--accent-blue);
+    font-weight: bold;
+}
+
+.task-status {
+    color: var(--warning-orange);
+    font-weight: bold;
+}
+
+.task-priority {
+    color: var(--danger-red);
+    font-weight: bold;
+}
+
+.task-controls {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+}
+
+/* 任務內容樣式 */
+.task-content {
+    padding-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.item-bullet {
+    font-weight: bold;
+    color: var(--text-dark);
+    min-width: 12px;
+}
+
+.item-text {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 4px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.item-text:focus {
+    outline: none;
+    background-color: var(--light-blue);
+    box-shadow: 0 0 0 1px var(--accent-blue);
+}
+
+/* 表格樣式 */
+.table-container {
+    margin: 12px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px;
+    background-color: white;
+}
+
+.table-controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.task-table td, .task-table th {
+    border: 1px solid var(--border-color);
+    padding: 6px 8px;
+    text-align: left;
+}
+
+.task-table th {
+    background-color: var(--light-blue);
+    font-weight: bold;
+}
+
+.task-table td:focus {
+    outline: 2px solid var(--accent-blue);
+    background-color: #f8f9fa;
+}
+
+/* 圖片樣式 */
+.image-container {
+    margin: 12px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 8px;
+    background-color: white;
+}
+
+.image-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.image-width-slider {
+    flex: 1;
+    max-width: 200px;
+}
+
+.width-display {
+    font-size: 12px;
+    color: var(--text-medium);
+    min-width: 50px;
+}
+
+.task-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 預覽區域樣式 */
+.preview-container {
+    flex: 0 0 50%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+}
+
+.preview-header {
+    background: var(--primary-blue);
+    color: white;
+    padding: 16px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preview-content {
+    padding: 20px;
+    max-height: 80vh;
+    overflow-y: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 11pt;
+    line-height: 1.4;
+}
+
+/* Outlook 預覽樣式 */
+.preview-content .block-header-preview {
+    background-color: var(--highlight-yellow);
+    font-weight: bold;
+    padding: 4px 8px;
+    margin: 10px 0 5px 0;
+    border: 1px solid #ccc;
+}
+
+.preview-content .task-item-preview {
+    margin: 8px 0;
+    padding-left: 20px;
+}
+
+.preview-content .task-number-preview {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.preview-content .task-title-preview {
+    font-weight: bold;
+}
+
+.preview-content .due-date-preview {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.preview-content .status-preview {
+    color: #ff6600;
+    font-weight: bold;
+}
+
+.preview-content .priority-preview {
+    color: #cc0000;
+    font-weight: bold;
+}
+
+.preview-content .sub-item-preview {
+    margin: 3px 0;
+    padding-left: 20px;
+}
+
+.preview-content .link-preview {
+    color: #0066cc;
+    text-decoration: underline;
+}
+
+/* 模態對話框樣式 */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90vw;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    background: var(--primary-blue);
+    color: white;
+    padding: 16px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.upload-preview {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.upload-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+}
+
+/* 響應式設計 */
+@media (max-width: 1024px) {
+    main {
+        flex-direction: column;
+    }
+    
+    .preview-container {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .toolbar {
+        justify-content: center;
+    }
+    
+    .task-meta {
+        flex-direction: column;
+    }
+    
+    .task-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .task-controls {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
+
+/* 拖拽樣式 */
+.dragging {
+    opacity: 0.5;
+    transform: rotate(2deg);
+}
+
+.drop-zone {
+    border: 2px dashed var(--accent-blue);
+    background-color: var(--light-blue);
+}
+
+/* 動畫效果 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.block, .task {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* 滾動條樣式 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-gray);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--light-blue);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
+}
