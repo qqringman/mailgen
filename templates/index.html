@@ -6,6 +6,8 @@
     <title>Task Management System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,14 +17,24 @@
                 <button id="addBlockBtn" class="btn btn-primary">
                     <i class="fas fa-plus"></i> 新增區塊
                 </button>
+                <div class="dropdown">
+                    <button id="loadBtn" class="btn btn-info dropdown-toggle">
+                        <i class="fas fa-upload"></i> 載入 <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button onclick="loadData()">載入上次資料</button>
+                        <button onclick="openTemplateModal()">載入模板</button>
+                        <button onclick="openFileLoadModal()">載入檔案</button>
+                    </div>
+                </div>
                 <button id="saveBtn" class="btn btn-success">
                     <i class="fas fa-save"></i> 儲存
                 </button>
-                <button id="loadBtn" class="btn btn-info">
-                    <i class="fas fa-upload"></i> 載入
-                </button>
                 <button id="previewBtn" class="btn btn-warning">
                     <i class="fas fa-eye"></i> 預覽
+                </button>
+                <button id="attachmentBtn" class="btn btn-secondary">
+                    <i class="fas fa-paperclip"></i> 附件 (<span id="attachmentCount">0</span>)
                 </button>
                 <button id="exportHtmlBtn" class="btn btn-secondary">
                     <i class="fas fa-file-code"></i> 匯出 HTML
@@ -35,7 +47,7 @@
 
         <main>
             <div class="editor-container">
-                <div id="blocksContainer" class="blocks-container">
+                <div id="blocksContainer" class="blocks-container sortable-blocks">
                     <!-- 動態生成的區塊將插入這裡 -->
                 </div>
             </div>
@@ -43,9 +55,17 @@
             <div id="previewContainer" class="preview-container" style="display: none;">
                 <div class="preview-header">
                     <h2>Outlook 預覽</h2>
-                    <button id="closePreviewBtn" class="btn btn-secondary">
-                        <i class="fas fa-times"></i> 關閉預覽
-                    </button>
+                    <div class="preview-controls">
+                        <button id="previewEditBtn" class="btn btn-sm btn-info">
+                            <i class="fas fa-edit"></i> 預覽編輯模式
+                        </button>
+                        <button id="applyPreviewChanges" class="btn btn-sm btn-success" style="display: none;">
+                            <i class="fas fa-check"></i> 套用變更
+                        </button>
+                        <button id="closePreviewBtn" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> 關閉預覽
+                        </button>
+                    </div>
                 </div>
                 <div id="previewContent" class="preview-content"></div>
             </div>
@@ -57,6 +77,9 @@
         <div class="block" data-block-id="">
             <div class="block-header">
                 <div class="block-header-left">
+                    <div class="drag-handle" title="拖拽移動">
+                        <i class="fas fa-grip-vertical"></i>
+                    </div>
                     <input type="text" class="block-title" placeholder="輸入區塊標題..." value="">
                     <div class="block-controls">
                         <button class="btn-icon move-up" title="上移"><i class="fas fa-arrow-up"></i></button>
@@ -64,11 +87,17 @@
                         <button class="btn-icon delete-block" title="刪除區塊"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
-                <button class="add-task-btn btn btn-sm btn-primary">
-                    <i class="fas fa-plus"></i> 新增任務
-                </button>
+                <div class="dropdown">
+                    <button class="add-task-btn btn btn-sm btn-primary dropdown-toggle">
+                        <i class="fas fa-plus"></i> 新增任務 <i class="fas fa-caret-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button onclick="addTask(this.closest('.block'))">新增到區塊末尾</button>
+                        <button onclick="addTaskAfter(this.closest('.block'), null)">新增到特定位置</button>
+                    </div>
+                </div>
             </div>
-            <div class="tasks-container">
+            <div class="tasks-container sortable-tasks">
                 <!-- 任務將插入這裡 -->
             </div>
         </div>
@@ -78,6 +107,9 @@
     <template id="taskTemplate">
         <div class="task" data-task-id="">
             <div class="task-header">
+                <div class="drag-handle" title="拖拽移動任務">
+                    <i class="fas fa-grip-vertical"></i>
+                </div>
                 <span class="task-number">1.</span>
                 <div class="task-info">
                     <input type="text" class="task-title" placeholder="任務標題..." value="">
@@ -108,18 +140,33 @@
                     <button class="btn-icon delete-task" title="刪除任務"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
-            <div class="task-content">
+            <div class="task-content sortable-items">
                 <!-- 任務內容項目將插入這裡 -->
             </div>
         </div>
     </template>
 
-    <!-- 項目模板 -->
-    <template id="itemTemplate">
-        <div class="task-item" data-item-id="">
-            <span class="item-bullet">■</span>
-            <input type="text" class="item-text" placeholder="項目內容..." value="">
-            <button class="btn-icon delete-item" title="刪除項目"><i class="fas fa-times"></i></button>
+    <!-- 嵌套項目模板 -->
+    <template id="nestedItemTemplate">
+        <div class="nested-item" data-item-id="" data-level="0">
+            <div class="item-header">
+                <div class="drag-handle" title="拖拽移動項目">
+                    <i class="fas fa-grip-vertical"></i>
+                </div>
+                <div class="indent-controls">
+                    <button class="btn-icon indent-left" title="減少縮排"><i class="fas fa-outdent"></i></button>
+                    <button class="btn-icon indent-right" title="增加縮排"><i class="fas fa-indent"></i></button>
+                </div>
+                <span class="item-bullet">■</span>
+                <input type="text" class="item-text" placeholder="項目內容..." value="">
+                <div class="item-controls">
+                    <button class="btn-icon add-child-item" title="新增子項目"><i class="fas fa-plus"></i></button>
+                    <button class="btn-icon delete-item" title="刪除項目"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="child-items sortable-items">
+                <!-- 子項目將插入這裡 -->
+            </div>
         </div>
     </template>
 
@@ -127,6 +174,9 @@
     <template id="tableTemplate">
         <div class="table-container" data-table-id="">
             <div class="table-controls">
+                <div class="drag-handle" title="拖拽移動表格">
+                    <i class="fas fa-grip-vertical"></i>
+                </div>
                 <button class="btn-sm add-row">新增列</button>
                 <button class="btn-sm add-col">新增欄</button>
                 <button class="btn-sm delete-table">刪除表格</button>
@@ -150,6 +200,9 @@
     <template id="imageTemplate">
         <div class="image-container" data-image-id="">
             <div class="image-controls">
+                <div class="drag-handle" title="拖拽移動圖片">
+                    <i class="fas fa-grip-vertical"></i>
+                </div>
                 <input type="range" class="image-width-slider" min="100" max="800" value="300">
                 <span class="width-display">300px</span>
                 <button class="btn-sm delete-image">刪除圖片</button>
@@ -157,6 +210,68 @@
             <img src="" alt="Task Image" class="task-image">
         </div>
     </template>
+
+    <!-- 附件管理對話框 -->
+    <div id="attachmentModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-paperclip"></i> 附件管理</h3>
+                <button class="close-modal" onclick="closeAttachmentModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="attachment-upload">
+                    <input type="file" id="attachmentFileInput" multiple>
+                    <button class="btn btn-primary" onclick="uploadAttachment()">
+                        <i class="fas fa-upload"></i> 上傳附件
+                    </button>
+                </div>
+                <div id="attachmentList" class="attachment-list">
+                    <!-- 附件列表將顯示在這裡 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeAttachmentModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模板選擇對話框 -->
+    <div id="templateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-alt"></i> 選擇模板</h3>
+                <button class="close-modal" onclick="closeTemplateModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="templateList" class="template-list">
+                    <!-- 模板列表將顯示在這裡 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTemplateModal()">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 檔案載入對話框 -->
+    <div id="fileLoadModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-upload"></i> 載入檔案</h3>
+                <button class="close-modal" onclick="closeFileLoadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="file-upload-section">
+                    <label for="templateFileInput">選擇檔案（支援 .json, .msg）：</label>
+                    <input type="file" id="templateFileInput" accept=".json,.msg">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeFileLoadModal()">取消</button>
+                <button class="btn btn-primary" onclick="loadFromFile()">載入</button>
+            </div>
+        </div>
+    </div>
 
     <!-- 圖片上傳對話框 -->
     <div id="imageUploadModal" class="modal" style="display: none;">
@@ -174,6 +289,25 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeImageModal()">取消</button>
                 <button class="btn btn-primary" onclick="uploadImage()">上傳</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 任務位置選擇對話框 -->
+    <div id="taskPositionModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>選擇插入位置</h3>
+                <button class="close-modal" onclick="closeTaskPositionModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="positionTree" class="position-tree">
+                    <!-- 位置樹將動態生成 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTaskPositionModal()">取消</button>
+                <button class="btn btn-primary" onclick="insertTaskAtPosition()">插入</button>
             </div>
         </div>
     </div>
